@@ -9,7 +9,7 @@ class Task(models.Model):
     create_user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False, related_name='task_user',
                                     verbose_name='작성자')
     team = models.ForeignKey(Team, on_delete=models.CASCADE, null=False, blank=False, related_name='task_team',
-                             verbose_name='할당 팀')
+                             verbose_name='작성팀')
     title = models.CharField(max_length=255, null=False, blank=False, verbose_name='제목')
     content = models.TextField(null=True, blank=True, verbose_name='내용')
     is_complete = models.BooleanField(default=False, verbose_name='완료 여부')

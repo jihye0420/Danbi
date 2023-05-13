@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from users import views
+from . import views
 
 urlpatterns = [
     # 회원가입 / 로그인, 로그아웃

@@ -12,7 +12,7 @@ class Team(models.Model):
         return self.name
 
     class Meta:
-        db_table = 'team'
+        db_table = 'Team'
 
 
 class UserManager(BaseUserManager):

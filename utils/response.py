@@ -7,7 +7,7 @@ FORBIDDEN_ERROR = 'not permission'
 NOT_FOUND_ERROR = 'server can not find the requested resource'
 
 
-def response(status, message=None, data=None):
+def custom_response(status, message=None, data=None):
     """
     function for return requets
     """
