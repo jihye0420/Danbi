@@ -33,8 +33,9 @@ class SubTask(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=False, blank=False,
                                       verbose_name='생성 일자')
     modified_at = models.DateTimeField(auto_now=True, null=True, blank=True, verbose_name='수정 일자')
-    task_id = models.ForeignKey(Task, on_delete=models.CASCADE, null=False, blank=False, related_name='subtask_task',
-                                verbose_name='상위 업무')
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, null=False, blank=False, related_name='subtask_task',
+                             verbose_name='상위 업무')
+    is_delete = models.BooleanField(default=False, verbose_name='삭제 여부')
 
     class Meta:
         managed = True
