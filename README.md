@@ -32,7 +32,7 @@ $ source ${가상환경명}/Scripts/activate  # 윈도우
 # Then install the dependencies
 (venv)$ pip install -r requirements.txt
 
-# env 파일 생성하기 (아래 설명 참고)
+# .env 파일 생성하기 (아래 설명 참고)
 
 # Django settings (DB 생성)
 (venv)$ python manage.py makemigrations --settings=config.settings.local
