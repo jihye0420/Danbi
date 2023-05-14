@@ -28,11 +28,7 @@ class TasksView(APIView):
         tasks = Task.objects.all()
         team = get_object_or_404(Team, pk=request.user.team.team_id)
         sub_tasks = SubTask.objects.filter(team=team, is_delete=False)
-        # print(data)
 
-        # self.check_object_permissions(self.request, tasks[0])
-
-        # task_list = TaskListSerializer(tasks, many=True).data
         if sub_tasks:
             data = {
                 'task': TaskListSerializer(tasks, many=True).data,
@@ -49,11 +45,9 @@ class TasksView(APIView):
     def post(self, request):
         """
         Task 생성
-
-        :args:
-        - title: Task 이름
-        - content: Task 설명
-        - team_list: 하위 업무로 지정할 팀 ID 리스트
+        - title: Task 제목
+        - content: Task 내용
+        - team_list: 하위 업무로 지정할 team_id 리스트
         """
         try:
             title = request.data.get('title')
@@ -103,8 +97,6 @@ class TaskView(APIView):
     def get(self, request, pk):
         """
         Task 상세 조회
-
-        :params:
         - pk: Task ID
         """
         task = get_object_or_404(Task, pk=pk)
@@ -118,11 +110,7 @@ class TaskView(APIView):
     def put(self, request, pk):
         """
         Task 수정
-
-        :params:
         - pk: Task ID
-
-        :args:
         - title: Task 이름
         - content: Task 설명
         - team_list: 하위 업무로 지정할 팀 ID 리스트
@@ -132,18 +120,13 @@ class TaskView(APIView):
             # 작성자 확인
             self.check_object_permissions(self.request, task)
 
-            # # 작성자 확인 2
-            # if request.user.user_id != task.create_user.user_id:
-            #     return Response({'message': 'Task 작성자만 수정할 수 있습니다.'},
-            #                     status=status.HTTP_401_UNAUTHORIZED)
-
             title = request.data.get('title')
             content = request.data.get('content')
             team_list = request.data.get('team_list')  # 새롭게 하위 업무를 담당할 팀 ID 리스트 (기존 팀 ID 리스트가 넘어올 수 있음)
             # 완료 여부
             is_complete = request.data.get('is_complete')
             # 필요한 데이터 검증
-            if not (title and content and team_list):  # todo: 검사 로직 확인하기
+            if not (title and content and team_list):
                 res = custom_response(status=400)
                 return Response(res, status=status.HTTP_200_OK)
         except KeyError:
@@ -158,16 +141,10 @@ class TaskView(APIView):
         if serializer.is_valid():
             serializer.save()
 
-        # * 완료 되었다면 삭제 불가
-        # 기존 sub_task_list를 가져온다.
-        # 변경할 team_list를 가져온다.
-        # 기존과 변경할 list를 비교한다.
-
         sub_task_list = SubTask.objects.filter(task=task, is_delete=False).all()
 
         sub_task_dict = {obj.team.pk: obj for obj in sub_task_list}
         for team_id in team_list:
-            # team_id 가 존재한다면
             if team_id in sub_task_dict:
                 sub_task_dict.pop(team_id)
                 continue
@@ -195,9 +172,7 @@ class SubTaskView(APIView):
 
     def put(self, request, pk):
         """
-        SubTask 수정
-
-        :params:
+        SubTask 수정 (완료 처리)
         - pk: SubTask ID
         """
 
@@ -215,11 +190,6 @@ class SubTaskView(APIView):
         except KeyError:
             res = custom_response(status=status.HTTP_400_BAD_REQUEST)
             return Response(res, status=status.HTTP_200_OK)
-
-        # sub_task.is_complete = True
-        # end_time = datetime.now()
-        # sub_task.modified_at = end_time
-        # sub_task.completed_date = end_time
 
         if is_complete:
             sub_task.is_complete = is_complete

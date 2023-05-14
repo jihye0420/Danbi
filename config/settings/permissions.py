@@ -36,8 +36,6 @@ class IsOwner(BasePermission):
                 return obj.id == user.user_id
             elif hasattr(obj, "create_user"):
                 return obj.create_user.user_id == user.user_id
-            # elif hasattr(obj, "team"):
-            #     return obj.team.team_id == user.team.team_id
             return False
         else:
             return False
