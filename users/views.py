@@ -5,7 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, TokenRefreshSerializer
 
-from utils.response import response
+from utils.response import custom_response
 from .models import User
 from .serializers import JWTSignupSerializer, JWTLoginSerializer
 
@@ -36,10 +36,10 @@ class JWTSignupView(APIView):
             # )
             # response.set_cookie('access', access_token, httponly=True)
             # response.set_cookie('refresh', refresh_token, httponly=True)
-            res = response(status=status.HTTP_201_CREATED)
+            res = custom_response(status=status.HTTP_201_CREATED)
             return Response(res, status=status.HTTP_200_OK)
         else:
-            res = response(status=400, message=serializer.errors)
+            res = custom_response(status=400, message=serializer.errors)
             return Response(res, status=status.HTTP_200_OK)
 
 
@@ -58,14 +58,14 @@ class JWTLoginView(APIView):
             password=request.data.get("password"),
         )
         if not user:
-            res = response(status=status.HTTP_400_BAD_REQUEST, message="이메일 또는 비밀번호를 확인하세요.")
+            res = custom_response(status=status.HTTP_400_BAD_REQUEST, message="이메일 또는 비밀번호를 확인하세요.")
             return Response(res, status=status.HTTP_200_OK)
 
         login(request, user)
         token = TokenObtainPairSerializer.get_token(user)
         # User.objects.get()
         #         serializer = LoginSerializer(user)
-        res = response(status=200, data={
+        res = custom_response(status=200, data={
             "token": {
                 "access": str(token.access_token),
                 "refresh": str(token),

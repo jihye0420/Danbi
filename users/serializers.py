@@ -43,3 +43,18 @@ class TeamSerializer(serializers.ModelSerializer):
         model = Team
         fields = ('id', 'name',)
         # depth = 2
+
+
+class UserInfoSerializer(serializers.ModelSerializer):
+    # team = TeamSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ('user_id', 'username', 'team')
+
+
+class TeamSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        fields = ('team_id', 'name',)
+        # depth = 2
